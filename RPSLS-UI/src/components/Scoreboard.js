@@ -7,11 +7,11 @@ export default function Scoreboard() {
 
     useEffect(() => {
         populateData()
-            .catch(console.error);;
-    }, []);
+            .catch(console.error);
+    }, [loading]);
 
     const populateData = async () => {
-        const scoreboardPromise = fetch('getscoreboard');
+        const scoreboardPromise = fetch('scoreboard/get');
         const choicesPromise = fetch('choices');
 
         const scoreboard = await (await scoreboardPromise).json();
@@ -45,12 +45,11 @@ export default function Scoreboard() {
                 <thead>
                     <tr>
                         <th rowSpan={2} className='text-center-center'>#</th>
-                        <th colSpan={2} className='text-center'>Player 1</th>
+                        <th className='text-center'>Player 1 (You)</th>
                         <th colSpan={2} className='text-center'>Player 2</th>
                         <th rowSpan={2} className='text-center-left'>Result</th>
                     </tr>
                     <tr>
-                        <th>Name</th>
                         <th>Gesture</th>
                         <th>Name</th>
                         <th>Gesture</th>
@@ -60,7 +59,6 @@ export default function Scoreboard() {
                     {scoreboard.map((e, i) =>
                         <tr key={`scoreboardrow-${i}`}>
                             <td className='text-center'>{i + 1}</td>
-                            <td>{e.playerOneName}</td>
                             <td>{e.playerOneGesture}</td>
                             <td>{e.playerTwoName}</td>
                             <td>{e.playerTwoGesture}</td>
@@ -72,12 +70,37 @@ export default function Scoreboard() {
         );
     };
 
+    const resetScoreboard = () => {
+        fetch('scoreboard/reset', { method: 'PUT' })
+            .catch(console.error);
+
+        setScoreboard([]);
+    }
+
+    const getContent = (loading) => {
+        if (loading === true) {
+            return <LoadingDelayedSpinner delay={200} />;
+        }
+        else {
+            return (
+                <>
+                    {scoreboard.length === 0
+                        ? <></>
+                        : renderTable(scoreboard)}
+                    <p>
+                        <button onClick={resetScoreboard}>
+                            Reset scoreboard
+                        </button>
+                    </p>
+                </>
+            )
+        }
+    }
+
     return (
         <div>
             <h1 id="tabelLabel" >Scoreboard</h1>
-            {loading
-                ? <LoadingDelayedSpinner delay={200} />
-                : renderTable(scoreboard)}
+            {getContent(loading)}
         </div>
     )
 }

@@ -56,6 +56,9 @@ const Dropdown = ({
     };
 
     const getDisplay = () => {
+        if (typeof placeHolder === typeof selectedValue) {
+            return placeHolder.label;
+        }
         if (!selectedValue || selectedValue.length === 0) {
             return placeHolder;
         }

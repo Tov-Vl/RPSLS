@@ -13,46 +13,53 @@ export default function PlayControl() {
         if (dataLoaded)
             return;
 
-        const fetchData = async () => {
-            const response = await fetch('choices');
-            const data = await response.json();
-
-            const capitalizeWord = (word) => {
-                let res = word.toLowerCase();
-                res = res.charAt(0).toUpperCase() + res.slice(1);
-                return res
-            };
-
-            const choices = data.id.map((_, i) => (
-                {
-                    value: {
-                        id: data.id[i],
-                        name: data.name[i]
-                    },
-                    label: capitalizeWord(data.name[i])
-                }));
-
-            setChoices(choices);
-            setDataLoaded(true);
-        }
-
         fetchData()
             .catch(console.error);
     });
 
+    const fetchData = async () => {
+        const response = await fetch('choices');
+        const data = await response.json();
+
+        const capitalizeWord = (word) => {
+            let res = word.toLowerCase();
+            res = res.charAt(0).toUpperCase() + res.slice(1);
+            return res
+        };
+
+        const choices = data.id.map((_, i) => (
+            {
+                value: {
+                    id: data.id[i],
+                    name: data.name[i]
+                },
+                label: capitalizeWord(data.name[i])
+            }));
+
+        setChoices(choices);
+        setDataLoaded(true);
+    }
+
+    const fetchRandomChoice = async () => {
+        const response = await fetch('choice');
+        const data = await response.json();
+        const choice = choices.find(x => {
+            return x.value.id === data.id;
+        });
+
+        setChoice(choice);
+    }
+
     const getRandomChoice = () => {
-        const fetchData = async () => {
-            const response = await fetch('choice');
-            const data = await response.json();
-            const choice = choices.find(x => {
-                return x.value.id === data.id;
-            });
-
-            setChoice(choice);
+        if (dataLoaded) {
+            fetchRandomChoice()
+                .catch(console.error);
         }
-
-        fetchData()
-            .catch(console.error);
+        else {
+            fetchData()
+                .then(fetchRandomChoice)
+                .catch(console.error);
+        }
     };
 
     return (
@@ -65,7 +72,7 @@ export default function PlayControl() {
                         </td>
                         <td className="table-dropdown">
                             <Dropdown
-                                placeHolder={choice !== undefined ? choice.label : "Select..."}
+                                placeHolder={choice !== undefined ? choice : "Select..."}
                                 options={choices}
                                 onChange={(value) => setChoice(value)}
                             />

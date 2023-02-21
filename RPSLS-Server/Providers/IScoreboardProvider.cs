@@ -7,5 +7,7 @@ namespace RPSLS_Server.Providers
         void AddEntry(ScoreboardEntry scoreboardEntry);
 
         ScoreboardEntry[] GetScoreboard();
+
+        bool TryResetScoreboard();
     }
 }

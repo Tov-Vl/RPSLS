@@ -50,9 +50,9 @@ Result: `application/json`
 }
 ```
 
-#### 4. Scoreboard
+#### 4. Scoreboard Get
 Get a scoreboard of the most recent game results.
-* GET: /getscoreboard  
+* GET: /scoreboard/get  
 Result: `application/json`
 ```
 [
@@ -65,6 +65,11 @@ Result: `application/json`
   }
 ]
 ```
+
+#### 4. Scoreboard Reset
+Get a scoreboard of the most recent game results.
+* PUT: /scoreboard/reset  
+Result: `Status Code`
 
 ### Note
 You can test all of these endpoints using Swagger UI from the `service_url`/swagger endpoint.

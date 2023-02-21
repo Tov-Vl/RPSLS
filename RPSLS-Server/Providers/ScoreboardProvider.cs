@@ -35,5 +35,12 @@ namespace RPSLS_Server.Providers
                 while (_scoreboard.Count > _limit && _scoreboard.TryDequeue(out _)) ;
             }
         }
+
+        public bool TryResetScoreboard()
+        {
+            _scoreboard.Clear();
+
+            return true;
+        }
     }
 }

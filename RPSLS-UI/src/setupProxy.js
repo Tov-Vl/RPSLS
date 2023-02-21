@@ -4,7 +4,8 @@ const context = [
     "/choice",
     "/choices",
     "/play",
-    "/getscoreboard"
+    "/scoreboard/get",
+    "/scoreboard/reset"
 ];
 
 module.exports = function (app) {
