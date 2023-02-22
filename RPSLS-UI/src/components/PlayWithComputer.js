@@ -1,4 +1,4 @@
-export default function PlayControl({ choice, onResult }) {
+export default function PlayWithComputer({ choice, onResult }) {
     const playWithComputer = () => {
         const fetchData = async () => {
             const params = {
